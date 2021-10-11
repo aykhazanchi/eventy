@@ -12,5 +12,6 @@ A Swedish event planner based on the business case provided in ID2207. The proje
 3. python3 -m venv venv
 4. source venv/bin/activate
 5. pip install -r requirements.txt
-6. flask run
-
+6. flask db upgrade
+7. flask run
+8. Add new user to start using
