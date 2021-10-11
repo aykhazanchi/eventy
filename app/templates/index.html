@@ -1,0 +1,10 @@
+
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h4>Welcome, {{ current_user.username }}!</h4>
+    {% for post in posts %}
+    <hr>
+    <div><p><b>Notification:</b> {{ post.author.username }} - {{ post.body }}</p></div>
+    {% endfor %}
+{% endblock %}
