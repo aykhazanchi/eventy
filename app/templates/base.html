@@ -23,6 +23,21 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('index') }}">Home</a></li>
+                {% if current_user.username == 'cso' or current_user.username == 'scso' %}
+                  <li><a href="{{ url_for('new_request') }}">Create New Request</a></li>
+                  {% if current_user.username == 'scso' %}
+                    <li><a href="{{ url_for('new_request') }}">Update Requests</a></li>
+                  {% endif %}
+                {% elif current_user.is_anonymous %}
+                  <!-- show nothing in nav -->
+                {% elif current_user.username == 'fm' or current_user.username == 'financemgr' %}
+                  <li><a href="{{ url_for('new_request') }}">Update Requests</a></li>
+                  <li><a href="{{ url_for('new_request') }}">Review Budget</a></li>
+                {% elif current_user.username == 'hrm' %}
+                  <li><a href="{{ url_for('new_request') }}">Update Requests</a></li>
+                  <li><a href="{{ url_for('new_request') }}">Review Resources</a></li>
+                  <li><a href="{{ url_for('new_request') }}">Review Inventory</a></li>
+                {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <!-- The current_user.is_anonymous expression is going to be True only when the user is not logged in. -->
