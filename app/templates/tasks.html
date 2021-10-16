@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <br>
+    <h4>Welcome, {{ current_user.name }}!</h4>
+    <br>
+    <b>Task Dashboard</b>
+    {% for task in tasks %}
+    <hr>
+    <div style="border: 0.2em solid navy;">
+        <p>Task ID: {{ task.id }}</p>
+        <p>Task Name: {{ task.task_name }}</p>
+        <p>Task Details: {{ task.task_details }}</p>
+        <p>Subteam: {{ task.subteam }}</p>
+        <p>Task Owner: {{ task.owner }}</p>
+        <p>Created By: {{ task.created_by }}</p>
+        <p>Task is part of request {{ task.request.id }}</p>
+    </div>
+    <br>
+    <br>
+    {% endfor %}
+{% endblock %}

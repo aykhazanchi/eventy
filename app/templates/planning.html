@@ -1,0 +1,24 @@
+
+{% extends "base.html" %}
+
+{% block app_content %}
+    <br>
+    <h4>Welcome, {{ current_user.name }}!</h4>
+    <br>
+    <b>Showing all requests assigned to {{ current_user.name }}. Requests below are ready for planning</b>
+    {% for req in reqs %}
+    <hr>
+    <div style="border: 0.2em solid navy;">
+        <a href={{ url_for('add_tasks', reqid=req.id) }}>
+            <p>Request ID: {{ req.id }}</p>
+            <p>Client Name: {{ req.client_name }}</p>
+            <p>Event Type: {{ req.event_type }}</p>
+            <p>Client Budget: {{ req.client_budget }}</p>
+            <p>Event Details: {{ req.event_details }}</p>
+            <p>Click to start planning this request</p>
+        </a>
+    </div>
+    <br>
+    <br>
+    {% endfor %}
+{% endblock %}
