@@ -2,9 +2,34 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-    <h4>Welcome, {{ current_user.username }}!</h4>
-    {% for post in posts %}
+    <br>
+    <h4>Requests assigned to {{ current_user.name }}</h4>
+    {% for assigned_request in assigned_requests %}
     <hr>
-    <div><p><b>Notification:</b> {{ post.author.username }} - {{ post.body }}</p></div>
+    <div style="border: 0.2em solid navy;">
+        <p>Request ID: {{ assigned_request.id }}</p>
+        <p>Client Name: {{ assigned_request.client_name }}</p>
+        <p>Event Type: {{ assigned_request.event_type }}</p>
+        <p>Client Budget: {{ assigned_request.client_budget }}</p>
+        <p>Event Details: {{ assigned_request.event_details }}</p>
+        {% if current_user.role == 'sm' or current_user.role == 'pm' or current_user.role == 'smtm' or current_user.role == 'pmtm' %}
+            <p><a href={{ url_for('add_tasks', reqid=assigned_request.id) }}>Plan Tasks</a></p>
+        {% else %}
+            <p><a href={{ url_for('update_request', reqid=assigned_request.id) }}>Update Request</a></p>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <hr>
+    <h4>Requests updated by {{ current_user.name }}</h4>
+    {% for updated_request in updated_requests %}
+    <hr>
+    <div style="border: 0.2em solid navy;">
+        <p>Request ID: {{ updated_request.id }}</p>
+        <p>Client Name: {{ updated_request.client_name }}</p>
+        <p>Event Type: {{ updated_request.event_type }}</p>
+        <p>Client Budget: {{ updated_request.client_budget }}</p>
+        <p>Event Details: {{ updated_request.event_details }}</p>
+        <p>Request currently assigned to <b>{{ updated_request.assigned_to }}</b></p> 
+    </div>
     {% endfor %}
 {% endblock %}
