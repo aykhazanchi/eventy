@@ -71,6 +71,30 @@ class Task(db.Model):
     def __repr__(self):
         return '<Task {}>'.format(self.body)
 
+class Resource(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    job_title = db.Column(db.String(64), index=True)
+    job_profile = db.Column(db.String(64))
+    experience_reqd = db.Column(db.Integer)
+    salary_max = db.Column(db.Integer)
+    salary_min = db.Column(db.Integer)
+    created_by = db.Column(db.String(64)) # Always SM or PM
+    assigned_to = db.Column(db.String(64)) # maps to HR or SM/PM
+
+    def __repr__(self):
+        return '<Resource {}>'.format(self.body)
+
+class Budget(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    budget_for = db.Column(db.String(64), index=True)
+    budget_quote = db.Column(db.Integer)
+    budget_details = db.Column(db.String(120))
+    created_by = db.Column(db.String(64)) # Always SM or PM
+    assigned_to = db.Column(db.String(64)) # maps to HR or SM/PM
+
+    def __repr__(self):
+        return '<Budget {}>'.format(self.body)
+
 'define a user loader function for user login and logged-in sessions'
 @login.user_loader
 def load_user(id):

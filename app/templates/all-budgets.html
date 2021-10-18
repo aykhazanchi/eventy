@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}
+
+{% block app_content %}
+    <br>
+    <h4>Welcome, {{ current_user.name }}!</h4>
+    <br>
+    <b>Showing all budget requests raised recently.</b>
+    {% for budget in budgets %}
+    <hr>
+    <div style="border: 0.2em solid navy;">
+        <p>Budget Request ID: {{ budget.id }}</p>
+        <p>Budget Needed For: {{ budget.budget_for }}</p>
+        <p>Budget Quote (SEK): {{ budget.budget_quote }}</p>
+        <p>Details: {{ budget.budget_details }}</p>
+        <p>Request Created By: {{ budget.created_by }}</p>
+        <p>Request Assigned To: {{ budget.assigned_to }}</p>
+        <p><a href={{ url_for('update_budget', budgetid=budget.id) }}>Click to update request</a></p>
+    </div>
+    <br>
+    <br>
+    {% endfor %}
+{% endblock %}

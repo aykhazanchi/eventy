@@ -7,8 +7,8 @@ from werkzeug.urls import url_parse
 from wtforms.fields.core import StringField
 'from our app package import the app instance variable we created'
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, RequestForm, TaskForm
-from app.models import Task, User, Request, load_user
+from app.forms import BudgetForm, LoginForm, RegistrationForm, RequestForm, ResourceForm, TaskForm
+from app.models import Budget, Resource, Task, User, Request, load_user
 
 '@login_required makes this view a protected view'
 @app.route('/')
@@ -229,3 +229,132 @@ def view_tasks():
     # get all tasks by subteam
     tasks = Task.query.filter_by(subteam=subteam).order_by(Task.request.desc())
     return render_template('tasks.html', title='Task Dashboard', tasks=tasks)
+
+@app.route('/new-resource', methods=['GET', 'POST'])
+@login_required
+def new_resource():
+    if current_user.role is None:
+        return redirect(url_for('login'))
+    if current_user.role != 'sm' and current_user.role != 'pm':
+        return redirect(url_for('index'))
+    
+    form = ResourceForm()
+
+    if form.validate_on_submit():
+        res = Resource(job_title=form.job_title.data, job_profile=form.job_profile.data,
+            experience_reqd=form.experience_reqd.data, salary_max=form.salary_max.data,
+            salary_min=form.salary_min.data)
+        res.created_by = current_user.role
+        res.assigned_to = 'hr'
+
+        db.session.add(res)
+        db.session.commit()
+        
+        flash('Resource request raised successfully!')
+        return redirect(url_for('index'))
+
+    return render_template('resource.html', title='Resource Request Form', form=form)
+
+@app.route('/all-resources', methods=['GET'])
+@login_required
+def all_resources():
+    if current_user.role is None:
+        return redirect(url_for('login'))
+    if current_user.role != 'hr':
+        return redirect(url_for('index'))
+    
+    # get all resource requests
+    resources = Resource.query.filter_by(assigned_to=current_user.role)
+    return render_template('all-resources.html', title='Resource Requests', resources=resources)
+
+@app.route('/update-resource/<resid>', methods=['GET', 'POST'])
+@login_required
+def update_resource(resid):
+    if current_user.role is None:
+        return redirect(url_for('login'))
+    if current_user.role != 'hr':
+        return redirect(url_for('index'))
+
+    res = Resource.query.filter_by(id=resid).first_or_404()
+    form = ResourceForm()
+
+    if form.validate_on_submit():
+        res.job_title = form.job_title.data
+        res.job_profile = form.job_profile.data
+        res.experience_reqd = form.experience_reqd.data
+        res.salary_max = form.salary_max.data
+        res.salary_min = form.salary_min.data
+        db.session.add(res)
+        db.session.commit(res)
+        flash('Resource request updated successfully!')
+        return redirect(url_for('index'))
+    elif request.method == 'GET':
+        form.job_title.data = res.job_title
+        form.job_profile.data = res.job_profile
+        form.experience_reqd.data = res.experience_reqd
+        form.salary_max.data = res.salary_max
+        form.salary_min.data = res.salary_min
+        
+    return render_template('resource.html', title='Update Resource Request', res=res, form=form)
+
+@app.route('/new-budget', methods=['GET', 'POST'])
+@login_required
+def new_budget():
+    if current_user.role is None:
+        return redirect(url_for('login'))
+    if current_user.role != 'sm' and current_user.role != 'pm':
+        return redirect(url_for('index'))
+    
+    form = BudgetForm()
+
+    if form.validate_on_submit():
+        budget = Budget(budget_for=form.budget_for.data, budget_quote=form.budget_quote.data,
+            budget_details=form.budget_details.data)
+        budget.created_by = current_user.role
+        budget.assigned_to = 'fm'
+
+        db.session.add(budget)
+        db.session.commit()
+        
+        flash('Budget request raised successfully!')
+        return redirect(url_for('index'))
+
+    return render_template('budget.html', title='Budget Request Form', form=form)
+
+@app.route('/all-budgets', methods=['GET'])
+@login_required
+def all_budgets():
+    if current_user.role is None:
+        return redirect(url_for('login'))
+    if current_user.role != 'pm':
+        return redirect(url_for('index'))
+    
+    # get all budget requests
+    budgets = Budget.query.filter_by(assigned_to=current_user.role)
+    return render_template('all-budgets.html', title='Budget Requests', budgets=budgets)
+
+@app.route('/update-budget/<budgetid>', methods=['GET', 'POST'])
+@login_required
+def update_budget(budgetid):
+    if current_user.role is None:
+        return redirect(url_for('login'))
+    if current_user.role != 'fm':
+        return redirect(url_for('index'))
+
+    budget = Budget.query.filter_by(id=budgetid).first_or_404()
+    form = BudgetForm()
+
+    if form.validate_on_submit():
+        budget.budget_for = form.budget_for.data
+        budget.budget_quote = form.budget_quote.data
+        budget.budget_details = form.budget_details.data
+        db.session.add(budget)
+        db.session.commit(budget)
+        flash('Budget request updated successfully!')
+        return redirect(url_for('index'))
+    elif request.method == 'GET':
+        form.budget_for.data = budget.budget_for
+        form.budget_quote.data = budget.budget_quote
+        form.budget_details.data = budget.budget_details
+        
+    return render_template('budget.html', title='Update Budget Request', budget=budget, form=form)

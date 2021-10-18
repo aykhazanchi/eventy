@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <br>
+    <h1>{{ title }}</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.budget_for.label }}<br>
+                    {{ form.budget_for(class_="form-control", size=32) }}
+                    {% for error in form.budget_for.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.budget_quote.label }}<br>
+                    {{ form.budget_quote(class_="form-control", size=32) }}
+                    {% for error in form.budget_quote.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.budget_details.label }}<br>
+                    {{ form.budget_details(class_="form-control", size=32)}}
+                    {% for error in form.budget_details.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {% if current_user.role == 'fm' %}
+                        {{ form.submit(value="Update Request", class="btn col-md-8", class_="form-control") }}
+                    {% else %}
+                        {{ form.submit(class="btn col-md-8", class_="form-control") }}
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

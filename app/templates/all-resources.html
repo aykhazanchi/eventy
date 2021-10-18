@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+
+{% block app_content %}
+    <br>
+    <h4>Welcome, {{ current_user.name }}!</h4>
+    <br>
+    <b>Showing all resource requests raised recently.</b>
+    {% for resource in resources %}
+    <hr>
+    <div style="border: 0.2em solid navy;">
+        <p>Resource Request ID: {{ resource.id }}</p>
+        <p>Job Title: {{ resource.job_title }}</p>
+        <p>Job Profile: {{ resource.job_profile }}</p>
+        <p>Experience Required (in Years): {{ resource.experience_reqd }}</p>
+        <p>Max Salary: {{ resource.salary_max }}</p>
+        <p>Min Salary: {{ resource.salary_min}}</p>
+        <p>Request Created By: {{ resource.created_by }}</p>
+        <p>Request Assigned To: {{ resource.assigned_to }}</p>
+        <p><a href={{ url_for('update_resource', resid=resource.id) }}>Click to update request</a></p>
+    </div>
+    <br>
+    <br>
+    {% endfor %}
+{% endblock %}

@@ -25,26 +25,27 @@
                 {% if current_user.role == 'cso' or current_user.role == 'scso' %}
                   <li><a href="{{ url_for('new_request') }}">Create New Request</a></li>
                   {% if current_user.role == 'scso' %}
-                    <li><a href="{{ url_for('pending_updates') }}">Update Requests</a></li>
+                    <li><a href="{{ url_for('pending_updates') }}">Event Requests</a></li>
                   {% endif %}
                 {% elif current_user.is_anonymous %}
                   <!-- show nothing in nav -->
                 {% elif current_user.role == 'fm' %}
-                  <li><a href="{{ url_for('pending_updates') }}">Update Requests</a></li>
-                  <li><a href="{{ url_for('new_request') }}">Review Budget</a></li>
+                  <li><a href="{{ url_for('pending_updates') }}">Event Requests</a></li>
+                  <li><a href="{{ url_for('all_budgets') }}">Review Budget Requests</a></li>
                 {% elif current_user.role == 'am' or current_user.role == 'sm' or current_user.role == 'pm' or current_user.role == 'smpm' or current_user.role == 'pmtm' %}
-                  <li><a href="{{ url_for('pending_updates') }}">Update Requests</a></li>
+                  <li><a href="{{ url_for('pending_updates') }}">Event Requests</a></li>
                   {% if current_user.role == 'pm' or current_user.role == 'sm' %}
                     <li><a href="{{ url_for('planning_dashboard') }}">Planning Dashboard</a></li>
                     <li><a href="{{ url_for('view_tasks') }}">Team Tasks</a></li>
+                    <li><a href="{{ url_for('new_resource') }}">Resource Request</a></li>
+                    <li><a href="{{ url_for('new_budget') }}">Budget Request</a></li>
                   {% endif %}
                   {% if current_user.role == 'pmtm' or current_user.role == 'smtm' %}
                     <li><a href="{{ url_for('view_tasks') }}">Team Tasks</a></li>
                   {% endif %}
                 {% elif current_user.role == 'hr' %}
-                  <li><a href="{{ url_for('pending_updates') }}">Update Requests</a></li>
-                  <li><a href="{{ url_for('new_request') }}">Review Resources</a></li>
-                  <li><a href="{{ url_for('new_request') }}">Review Inventory</a></li>
+                  <li><a href="{{ url_for('pending_updates') }}">Event Requests</a></li>
+                  <li><a href="{{ url_for('all_resources') }}">Review Resource Requests</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">

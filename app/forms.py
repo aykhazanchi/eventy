@@ -60,3 +60,17 @@ class TaskForm(FlaskForm):
     subteam = StringField('Subteam', default=None)
     linked_to = TextField('Linked Request ID:')
     submit = SubmitField('Submit')
+
+class ResourceForm(FlaskForm):
+    job_title = StringField('Job Title', validators=[DataRequired()])
+    job_profile = StringField('Job Profile', validators=[DataRequired()])
+    salary_max = IntegerField('Max Salary', validators=[DataRequired()])
+    salary_min = IntegerField('Min Salary', validators=[DataRequired(), NumberRange(min=0)])
+    experience_reqd = IntegerField('Experience Required (in Years)', validators=[DataRequired(), NumberRange(min=0)])
+    submit = SubmitField('Raise Resource Request')
+
+class BudgetForm(FlaskForm):
+    budget_for = StringField('Budget needed for', validators=[DataRequired()])
+    budget_quote = IntegerField('Budget Amount', validators=[DataRequired(), NumberRange(min=0)])
+    budget_details = TextAreaField('Details about budget requested', validators=[DataRequired()])
+    submit = SubmitField('Raise Budget Request')
