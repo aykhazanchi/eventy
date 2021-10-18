@@ -57,8 +57,6 @@ class RequestForm(FlaskForm):
 class TaskForm(FlaskForm):
     task_name = StringField('Task Name', validators=[DataRequired()])
     task_details = TextAreaField('Task Details', validators=[DataRequired()])
-    subteam = RadioField('Assign to Sub Team', choices=[('services', 'Services Management'),
-        ('production', 'Production Management')])
-    owner = StringField('Owner', default=None)
+    subteam = StringField('Subteam', default=None)
     linked_to = TextField('Linked Request ID:')
     submit = SubmitField('Submit')

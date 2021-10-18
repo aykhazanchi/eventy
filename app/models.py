@@ -65,12 +65,8 @@ class Task(db.Model):
     task_details = db.Column(db.String(120), index=True)
     created_by = db.Column(db.String(64)) # Always SM or PM
     subteam = db.Column(db.String(64))
-    owner = db.Column(db.String(64))
 
     request = db.Column(db.Integer, db.ForeignKey('request.id'))
-
-    def set_assigned_to(self, assigned_to):
-        self.assigned_to = assigned_to
 
     def __repr__(self):
         return '<Task {}>'.format(self.body)

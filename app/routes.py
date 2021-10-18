@@ -198,10 +198,12 @@ def add_tasks(reqid):
     req = Request.query.filter_by(id=reqid).first()
     
     form.linked_to.data = req.id
+    subteam = current_user.role + 'tm'
+    form.subteam.data = subteam
 
     if form.validate_on_submit():
         task = Task(task_name=form.task_name.data, task_details=form.task_details.data, 
-            subteam=form.subteam.data, owner=form.owner.data)
+            subteam=subteam)
         task.created_by = current_user.role
         
         db.session.add(task)
@@ -220,6 +222,10 @@ def view_tasks():
     if current_user.role != 'sm' and current_user.role != 'pm' and current_user.role != 'smtm' and current_user.role != 'pmtm':
         return redirect(url_for('index'))
     
-    # get all tasks
-    tasks = Task.query.filter_by().order_by(Task.request.desc())
+    if current_user.role == 'smtm' or current_user.role == 'pmtm':
+        subteam = current_user.role
+    else:
+        subteam = current_user.role + 'tm'
+    # get all tasks by subteam
+    tasks = Task.query.filter_by(subteam=subteam).order_by(Task.request.desc())
     return render_template('tasks.html', title='Task Dashboard', tasks=tasks)
