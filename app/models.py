@@ -41,8 +41,10 @@ class Request(db.Model):
     event_type = db.Column(db.String(64), index=True)
     event_details = db.Column(db.String(120))
     client_budget = db.Column(db.Integer)
+    feedback = db.Column(db.String(120))
     created_by = db.Column(db.String(64)) # not really changed, more a view for CSO and SCSO
     assigned_to = db.Column(db.String(64)) # maps to username or sub team
+    status = db.Column(db.String(64))
     #event_date = db.Column(db.Date())
     ready_for_planning = db.Column(db.Boolean(False))
     tasks_for = db.Column(db.String(64))

@@ -12,6 +12,8 @@
         <p>Event Type: {{ assigned_request.event_type }}</p>
         <p>Client Budget: {{ assigned_request.client_budget }}</p>
         <p>Event Details: {{ assigned_request.event_details }}</p>
+        <p>Feedback: {{ assigned_request.feedback}}</p>
+        <p>Request Status: {{ assigned_request.status }}</p>
         {% if current_user.role == 'sm' or current_user.role == 'pm' or current_user.role == 'smtm' or current_user.role == 'pmtm' %}
             <p><a href={{ url_for('add_tasks', reqid=assigned_request.id) }}>Plan Tasks</a></p>
         {% else %}
@@ -29,6 +31,8 @@
         <p>Event Type: {{ updated_request.event_type }}</p>
         <p>Client Budget: {{ updated_request.client_budget }}</p>
         <p>Event Details: {{ updated_request.event_details }}</p>
+        <p>Feedback: {{ updated_request.feedback}}</p>
+        <p>Request Status: {{ updated_request.status }}</p>
         <p>Request currently assigned to <b>{{ updated_request.assigned_to }}</b></p> 
     </div>
     {% endfor %}

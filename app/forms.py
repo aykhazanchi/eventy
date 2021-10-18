@@ -45,10 +45,13 @@ class RequestForm(FlaskForm):
     client_name = StringField('Client Name', validators=[DataRequired()])
     event_type = StringField('Event Type', validators=[DataRequired()])
     event_details = TextField('Event Details', validators=[DataRequired()])
-    client_budget = IntegerField('Budget', validators=[DataRequired(), NumberRange(min=1000)])
+    client_budget = IntegerField('Budget (SEK)', validators=[DataRequired(), NumberRange(min=1000)])
+    feedback = TextAreaField('Feedback', default='')
+    status = StringField('Status', validators=[DataRequired()], default='Open')
     submit = SubmitField('Submit')
     servicessubmit = SubmitField('Send to Services Team')
     productionsubmit = SubmitField('Send to Production Team')
+    closesubmit = SubmitField('Reject')
 
 
 class TaskForm(FlaskForm):

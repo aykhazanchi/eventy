@@ -82,7 +82,7 @@ def new_request():
     if form.validate_on_submit():
         req = Request(client_name=form.client_name.data, 
             event_type=form.event_type.data, event_details=form.event_details.data,
-            client_budget=form.client_budget.data, created_by=current_user.username)
+            client_budget=form.client_budget.data, feedback=form.feedback.data, status=form.status.data, created_by=current_user.username)
 
         set_assigned_to(req, None)
         
@@ -117,13 +117,22 @@ def update_request(reqid):
 
     # when POST call, means request is updated
     if form.validate_on_submit():
+        if form.closesubmit.data:
+            req.status = 'Rejected'
+            set_assigned_to(req, 'scso')
+            db.session.add(req)
+            db.session.commit()
+            flash('Request status updated')
+            return redirect(url_for('index'))
         # save the edits
         # When GET call, show the request based on specific request ID
-        req.client_name = form.client_name.data
+        req.client_name=form.client_name.data
         req.event_type=form.event_type.data
         req.event_details=form.event_details.data
         req.client_budget=form.client_budget.data
+        req.feedback=form.feedback.data
         req.created_by=current_user.username
+        req.status=form.status.data
         set_assigned_to(req, None)
         # set ready_for_planning=true if approval is by AM
         if current_user.role == 'am':
@@ -145,6 +154,7 @@ def update_request(reqid):
         form.event_type.data = req.event_type
         form.event_details.data = req.event_details
         form.client_budget.data = req.client_budget
+        form.status.data = req.status
         
     return render_template('update.html', title='Update Request', req=req, form=form)
 

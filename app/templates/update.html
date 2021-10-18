@@ -37,11 +37,34 @@
                     {% endfor %}
                 </div>
                 <div class="form-group">
-                    {% if req.ready_for_planning %}
-                        {{ form.servicessubmit(class="btn col-md-4", class_="form-control") }}
-                        {{ form.productionsubmit(class="btn col-md-4", class_="form-control") }}
+                    {{ form.feedback.label }}<br>
+                    {{ form.feedback(class_="form-control", size=120) }}
+                    {% for error in form.feedback.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.status.label }}<br>
+                    {{ form.status(class_="form-control", size=64, disabled=True) }}
+                    {% for error in form.status.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {% if req.status != 'Rejected' %}
+                        {% if req.ready_for_planning and current_user.role == 'scso' %}
+                            {{ form.servicessubmit(class="btn col-md-4", class_="form-control") }}
+                            {{ form.productionsubmit(class="btn col-md-4", class_="form-control") }}
+                        {% else %}
+                            {{ form.submit(class="btn col-md-4", class_="form-control") }}
+                        {% endif %}
+                        {% if current_user.role == 'am' or current_user.role == 'scso' %}
+                            {% if req != '' %}
+                                {{ form.closesubmit(class="btn col-md-4", class_="form-control") }}
+                            {% endif %}
+                        {% endif %}
                     {% else %}
-                        {{ form.submit(class="btn col-md-4", class_="form-control") }}
+                        {{ form.submit(value="Mark as Open", class="btn col-md-4", class_="form-control") }}
                     {% endif %}
                 </div>
             </form>
