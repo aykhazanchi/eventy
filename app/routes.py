@@ -284,6 +284,15 @@ def update_resource(resid):
         res.experience_reqd = form.experience_reqd.data
         res.salary_max = form.salary_max.data
         res.salary_min = form.salary_min.data
+        if current_user.role == 'hr':
+            if res.created_by == 'sm':
+                res.assigned_to = 'sm'
+            elif res.created_by == 'pm':
+                res.assigned_to = 'pm'
+            else:
+                res.assigned_to = 'hr'
+        elif current_user.role == 'sm' or current_user.role == 'pm':
+            res.assigned_to = 'hr'
         db.session.add(res)
         db.session.commit(res)
         flash('Resource request updated successfully!')
@@ -348,6 +357,15 @@ def update_budget(budgetid):
         budget.budget_for = form.budget_for.data
         budget.budget_quote = form.budget_quote.data
         budget.budget_details = form.budget_details.data
+        if current_user.role == 'hr':
+            if budget.created_by == 'sm':
+                budget.assigned_to = 'sm'
+            elif budget.created_by == 'pm':
+                budget.assigned_to = 'pm'
+            else:
+                budget.assigned_to = 'hr'
+        elif current_user.role == 'sm' or current_user.role == 'pm':
+            budget.assigned_to = 'hr'
         db.session.add(budget)
         db.session.commit(budget)
         flash('Budget request updated successfully!')
